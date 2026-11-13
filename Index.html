@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROXSY ADMIN TOOL</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 25px 20px;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+}
+
+header h1 {
+  margin: 0;
+  letter-spacing: 4px;
+}
+
+header p {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.container {
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.card {
+  border: 1px solid #fff;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 14px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 13px;
+  background: #111;
+  color: white;
+  border: 1px solid white;
+  border-radius: 7px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 7px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+
+.result {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  font-size: 11px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>PROXSY</h1>
+  <p>ADMIN CUSTOMER VERIFICATION</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h3>GETCONTACT CHECK</h3>
+
+    <label>Nomor HP Customer</label>
+    <input id="phone" type="tel"
+    placeholder="Masukkan nomor HP">
+
+    <button onclick="checkPhone()">
+      BUKA GETCONTACT
+    </button>
+
+    <label>Jumlah Penanda</label>
+    <input id="tags" type="number"
+    placeholder="Masukkan jumlah penanda">
+
+    <button onclick="checkTags()">
+      PERIKSA INDIKATOR
+    </button>
+
+    <div class="result" id="phoneResult"></div>
+  </div>
+
+  <div class="card">
+    <h3>INSTAGRAM CHECK</h3>
+
+    <label>Username Instagram</label>
+    <input id="instagram"
+    placeholder="@username">
+
+    <button onclick="openInstagram()">
+      BUKA PROFIL INSTAGRAM
+    </button>
+
+    <label>Tahun Pembuatan Akun</label>
+    <input id="year" type="number"
+    placeholder="Contoh: 2020">
+
+    <div class="result" id="igResult"></div>
+
+    <button onclick="checkInstagram()">
+      PERIKSA TAHUN AKUN
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>CATATAN ADMIN</h3>
+
+    <textarea id="notes"
+    rows="4"
+    placeholder="Catatan hasil pemeriksaan..."></textarea>
+
+    <button onclick="saveNotes()">
+      SIMPAN CATATAN
+    </button>
+
+    <div id="saved" class="result"></div>
+  </div>
+
+</div>
+
+<footer>
+  PROXSY RENTAL MOTOR BANDUNG<br>
+  ADMIN TOOL • INTERNAL USE
+</footer>
+
+<script>
+function checkPhone() {
+  let phone = document.getElementById("phone").value;
+
+  if (!phone) {
+    alert("Masukkan nomor HP terlebih dahulu");
+    return;
+  }
+
+  window.open(
+    "https://www.google.com/search?q=" +
+    encodeURIComponent("Getcontact " + phone),
+    "_blank"
+  );
+}
+
+function checkTags() {
+  let tags = Number(document.getElementById("tags").value);
+  let result = document.getElementById("phoneResult");
+
+  if (!document.getElementById("tags").value) {
+    result.innerText = "Masukkan jumlah penanda.";
+    return;
+  }
+
+  result.innerText = tags >= 50
+    ? "INDIKATOR TERPENUHI: 50 penanda atau lebih. Tetap perlu verifikasi admin."
+    : "INDIKATOR BELUM TERPENUHI: kurang dari 50 penanda.";
+}
+
+function openInstagram() {
+  let user = document.getElementById("instagram").value
+    .trim().replace(/^@/, "");
+
+  if (!user) {
+    alert("Masukkan username Instagram");
+    return;
+  }
+
+  window.open(
+    "https://www.instagram.com/" +
+    encodeURIComponent(user) + "/",
+    "_blank"
+  );
+}
+
+function checkInstagram() {
+  let year = Number(document.getElementById("year").value);
+  let current = new Date().getFullYear();
+  let result = document.getElementById("igResult");
+
+  if (!year || year < 2010 || year > current) {
+    result.innerText = "Masukkan tahun yang valid.";
+    return;
+  }
+
+  result.innerText =
+    "Tahun akun: " + year +
+    ". Data dimasukkan berdasarkan pemeriksaan admin, bukan hasil otomatis Instagram.";
+}
+
+function saveNotes() {
+  let notes = document.getElementById("notes").value;
+  localStorage.setItem("proxsyNotes", notes);
+
+  document.getElementById("saved").innerText =
+    "Catatan tersimpan di perangkat ini.";
+}
+
+document.getElementById("notes").value =
+  localStorage.getItem("proxsyNotes") || "";
+</script>
+
+</body>
+</html>
